@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import axios from 'axios'
 
 const NewNote = () => {
     const [form, setForm]= useState({userName:'', email:'', password:''})
@@ -27,12 +27,21 @@ const NewNote = () => {
         })
         // console.log(form);
     }
-    const submitHandler=(events)=>{
+    const submitHandler= async (events)=>{
         events.preventDefault()
 
         const subscription= {title: form.userName, email: form.email, password: form.password}
         // props.onSave(subscription)
-        
+        try {
+            // Make a POST request using Axios
+            const response = await axios.post('http://localhost:3000/notes', form);
+      
+            // Handle the response, you can log it or update state accordingly
+            console.log('Response:', response.data);
+          } catch (error) {
+            // Handle errors
+            console.error('Error:', error);
+          }
 
         console.log('on save',subscription);
     }
