@@ -1,14 +1,18 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
+// import createNote from './routes/NoteRoute.js'
+
 
 
 const app=express()
 app.use(cors())
 
-app.get("/", (req,res)=>{
-    res.send('hello')
-})
+// app.get("/", (req,res)=>{
+//     res.send('hello')
+// })
+
+// app.use("/notes", createNote)
 
 
 
