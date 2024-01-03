@@ -1,8 +1,14 @@
-import express from 'express'
-import {createNote} from"../controllers/user.js"
+import express from 'express';
 
-const router=express.Router()
+const router = express.Router();
 
-router.post("/",createNote)
+router.get('', (req, res) => {
+  res.json({ message: 'GET request received' });
+});
 
-module.exports = router
+router.post('', (req, res) => {
+  const dataFromBody = req.body; 
+  res.json({ message: 'POST request received', data: dataFromBody });
+});
+
+export default router;
