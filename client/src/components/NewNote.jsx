@@ -33,10 +33,8 @@ const NewNote = () => {
         const subscription= {title: form.userName, email: form.email, password: form.password}
         // props.onSave(subscription)
         try {
-            // Make a POST request using Axios
-            const response = await axios.post('http://localhost:3000/notes', form);
-      
-            // Handle the response, you can log it or update state accordingly
+            const response = await axios.post('http://localhost:5000/notes', form);
+
             console.log('Response:', response.data);
           } catch (error) {
             // Handle errors

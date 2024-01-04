@@ -8,6 +8,7 @@ router.get('', (req, res) => {
 
 router.post('', (req, res) => {
   const dataFromBody = req.body; 
+  console.log(dataFromBody);
   res.json({ message: 'POST request received', data: dataFromBody });
 });
 
