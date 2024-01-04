@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import './NewNote.css'
 
 
 const NewNote = () => {
@@ -19,11 +20,12 @@ const NewNote = () => {
         password: '',
         },
         validationSchema,
-        onSubmit: async (values) => {
+        onSubmit: async (values , { resetForm, setStatus }) => {
         try {
             const response = await axios.post('http://localhost:5000/notes', values);
             console.log('Response:', values);
             setMessage(response.data.message);
+            resetForm();
         } catch (error) {
             console.error('Error:', error);
         }
@@ -74,7 +76,7 @@ const NewNote = () => {
             </div>
             </div>
             <div className="new_subscription_actions">
-            <button type="submit">Add Subscription</button>
+            <button type="submit">Register</button>
             </div>
         </form>
         {message && <p>{message}</p>}
