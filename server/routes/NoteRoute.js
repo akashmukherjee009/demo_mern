@@ -13,6 +13,6 @@ router.post('', createNote);
   // console.log(dataFromBody);
   // res.json({ message: 'POST request received', data: dataFromBody });
 
-  router.post('/login', login);
+router.post('/login', login);
 
 export default router;

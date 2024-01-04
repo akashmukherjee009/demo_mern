@@ -2,27 +2,26 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import './NewNote.css'
+import './Login.css'
 
 
-const NewNote = () => {
+const Login = () => {
     const [message, setMessage] = useState('Hii');
     const validationSchema = Yup.object({
-        name: Yup.string().required('Name is required'),
         email: Yup.string().email('Invalid email address').required('Email is required'),
         password: Yup.string().min(4, 'Password must be at least 8 characters').required('Password is required'),
     });
 
     const formik = useFormik({
         initialValues: {
-        name: '',
         email: '',
         password: '',
         },
         validationSchema,
         onSubmit: async (values , { resetForm, setStatus }) => {
+            console.log(values);
         try {
-            const response = await axios.post('http://localhost:5000/notes', values);
+            const response = await axios.post('http://localhost:5000/notes/login', values);
             console.log('Response:', values);
             setMessage(response.data.message);
             resetForm();
@@ -34,21 +33,9 @@ const NewNote = () => {
 
     return (
         <div>
-            <h1>Register</h1>
+            <h1>Login</h1>
         <form onSubmit={formik.handleSubmit}>
             <div className="new_subscription_controls">
-            <div className="new_subscription_control">
-                <label htmlFor="">Name</label>
-                <input
-                type="text"
-                id="name"
-                name="name"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.name}
-                />
-                {formik.touched.name && formik.errors.name && <p className="error">{formik.errors.name}</p>}
-            </div>
             <div className="new_subscription_control">
                 <label htmlFor="">Email</label>
                 <input
@@ -77,7 +64,7 @@ const NewNote = () => {
             </div>
             </div>
             <div className="new_subscription_actions">
-            <button type="submit">Register</button>
+            <button type="submit">Login</button>
             </div>
         </form>
         {message && <p>{message}</p>}
@@ -85,4 +72,4 @@ const NewNote = () => {
     );
 };
 
-export default NewNote;
+export default Login;
