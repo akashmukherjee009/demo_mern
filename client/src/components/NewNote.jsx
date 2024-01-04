@@ -2,26 +2,26 @@ import React, { useState } from 'react'
 import axios from 'axios'
 
 const NewNote = () => {
-    const [form, setForm]= useState({userName:'', email:'', password:''})
+    const [form, setForm]= useState({name:'', email:'', password:''})
     const nameChangeHandler= (events)=>{
-        // setuserName(events.target.value)
-        // setForm({...form, userName: events.target.value})
+        // setname(events.target.value)
+        // setForm({...form, name: events.target.value})
         setForm((prevState)=>{
-            return {...prevState, userName: events.target.value}
+            return {...prevState, name: events.target.value}
         })
         // console.log(form);
     }
     const emailChangeHandler= (events)=>{
-        // setuserName(events.target.value)
-        // setForm({...form, userName: events.target.value})
+        // setname(events.target.value)
+        // setForm({...form, name: events.target.value})
         setForm((prevState)=>{
             return {...prevState, email: events.target.value}
         })
         // console.log(form);
     }
     const passwordChangeHandler= (events)=>{
-        // setuserName(events.target.value)
-        // setForm({...form, userName: events.target.value})
+        // setname(events.target.value)
+        // setForm({...form, name: events.target.value})
         setForm((prevState)=>{
             return {...prevState, password: events.target.value}
         })
@@ -30,10 +30,10 @@ const NewNote = () => {
     const submitHandler= async (events)=>{
         events.preventDefault()
 
-        const subscription= {title: form.userName, email: form.email, password: form.password}
+        // const subscription= {name: form.name, email: form.email, password: form.password}
         // props.onSave(subscription)
         try {
-            const response = await axios.post('http://localhost:5000/notes', form);
+           const response = await axios.post('http://localhost:5000/notes', form);
 
             console.log('Response:', response.data);
           } catch (error) {
@@ -41,7 +41,7 @@ const NewNote = () => {
             console.error('Error:', error);
           }
 
-        console.log('on save',subscription);
+        console.log('on save',form);
     }
   return ( 
     <div>
@@ -49,7 +49,7 @@ const NewNote = () => {
         <div className="new_subscription_controls">
             <div className="new_subscription_control">
                 <label htmlFor="">Name</label>
-                <input type="text" value={form.userName} onChange={nameChangeHandler} />
+                <input type="text" value={form.name} onChange={nameChangeHandler} />
             </div>
             <div className="new_subscription_control">
                 <label htmlFor="">Email</label>

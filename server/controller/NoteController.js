@@ -1,14 +1,26 @@
-import User from"../models/User.js"
+import pool from '../db.js';
 
-const createNote = async(req,res)=>{
-    const newUser = new User(req.body)
-    try{
-        const saveUser = await newUser.save()
-        res.status(200).json(saveUser)
-    }
-    catch(err){
-        console.log(err)
-    }
-}
+export const createNote = async (req, res) => {
+    try {
+        const { email, password, name } = req.body;
 
-module.exports = {createNote}
+        const result = await pool.query(
+        'INSERT INTO user_details (user_email, user_pass, user_name) VALUES ($1, $2, $3) RETURNING *',
+        [email, password, name ]
+        );
+
+        const createdNote = result.rows[0];
+
+        res.status(201).json({
+        message: 'Note created successfully',
+        note: createdNote,
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+export const getNotes = async (req, res) => {
+    console.log('Okk');
+};
