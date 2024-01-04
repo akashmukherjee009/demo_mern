@@ -1,75 +1,85 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
+
 
 const NewNote = () => {
-    const [form, setForm]= useState({name:'', email:'', password:''})
-    const nameChangeHandler= (events)=>{
-        // setname(events.target.value)
-        // setForm({...form, name: events.target.value})
-        setForm((prevState)=>{
-            return {...prevState, name: events.target.value}
-        })
-        // console.log(form);
-    }
-    const emailChangeHandler= (events)=>{
-        // setname(events.target.value)
-        // setForm({...form, name: events.target.value})
-        setForm((prevState)=>{
-            return {...prevState, email: events.target.value}
-        })
-        // console.log(form);
-    }
-    const passwordChangeHandler= (events)=>{
-        // setname(events.target.value)
-        // setForm({...form, name: events.target.value})
-        setForm((prevState)=>{
-            return {...prevState, password: events.target.value}
-        })
-        // console.log(form);
-    }
-    const submitHandler= async (events)=>{
-        events.preventDefault()
+    const [message, setMessage] = useState('Hii');
+    const validationSchema = Yup.object({
+        name: Yup.string().required('Name is required'),
+        email: Yup.string().email('Invalid email address').required('Email is required'),
+        password: Yup.string().min(4, 'Password must be at least 8 characters').required('Password is required'),
+    });
 
-        // const subscription= {name: form.name, email: form.email, password: form.password}
-        // props.onSave(subscription)
+    const formik = useFormik({
+        initialValues: {
+        name: '',
+        email: '',
+        password: '',
+        },
+        validationSchema,
+        onSubmit: async (values) => {
         try {
-           const response = await axios.post('http://localhost:5000/notes', form);
-
-            console.log('Response:', response.data);
-          } catch (error) {
-            // Handle errors
+            const response = await axios.post('http://localhost:5000/notes', values);
+            console.log('Response:', values);
+            setMessage(response.data.message);
+        } catch (error) {
             console.error('Error:', error);
-          }
+        }
+        },
+    });
 
-        console.log('on save',form);
-    }
-  return ( 
-    <div>
-       <form onSubmit={submitHandler}>
-        <div className="new_subscription_controls">
+    return (
+        <div>
+        <form onSubmit={formik.handleSubmit}>
+            <div className="new_subscription_controls">
             <div className="new_subscription_control">
                 <label htmlFor="">Name</label>
-                <input type="text" value={form.name} onChange={nameChangeHandler} />
+                <input
+                type="text"
+                id="name"
+                name="name"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.name}
+                />
+                {formik.touched.name && formik.errors.name && <p className="error">{formik.errors.name}</p>}
             </div>
             <div className="new_subscription_control">
                 <label htmlFor="">Email</label>
-                <input type="email"  onChange={emailChangeHandler}/>
+                <input
+                type="email"
+                id="email"
+                name="email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+                />
+                {formik.touched.email && formik.errors.email && <p className="error">{formik.errors.email}</p>}
             </div>
             <div className="new_subscription_control">
                 <label htmlFor="">Password</label>
-                <input type="password" value={form.password} onChange={passwordChangeHandler}/>
+                <input
+                type="password"
+                id="password"
+                name="password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
+                />
+                {formik.touched.password && formik.errors.password && (
+                <p className="error">{formik.errors.password}</p>
+                )}
             </div>
-        </div>
-        <div className="new_subscription_actions">
+            </div>
+            <div className="new_subscription_actions">
             <button type="submit">Add Subscription</button>
+            </div>
+        </form>
+        {message && <p>{message}</p>}
         </div>
-      
-      </form>
-    </div>
-  )
-}
+    );
+};
 
-export default NewNote
-
-
-
+export default NewNote;
