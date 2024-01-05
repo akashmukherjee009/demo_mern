@@ -1,5 +1,6 @@
 import express from 'express';
 import { createNote, login } from '../controller/NoteController.js';
+import { verifyToken } from '../middleware/VarifyToken.js';
 
 
 const router = express.Router();
@@ -14,5 +15,10 @@ router.post('', createNote);
   // res.json({ message: 'POST request received', data: dataFromBody });
 
 router.post('/login', login);
+
+router.get('/home', verifyToken, (req,res)=>{
+  res.status(200).json({ message: 'Protected route accessed' });
+});
+
 
 export default router;

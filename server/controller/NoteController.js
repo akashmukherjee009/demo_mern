@@ -1,5 +1,9 @@
 import pool from '../db.js';
 import bcrypt from 'bcrypt';
+import jwt  from 'jsonwebtoken';
+import { JWT_SECRET } from '../index.js';
+
+
 
 export const createNote = async (req, res) => {
     try {
@@ -9,10 +13,12 @@ export const createNote = async (req, res) => {
         'INSERT INTO user_details (user_email, user_pass, user_name) VALUES ($1, $2, $3) RETURNING *',
         [email, hashedPassword, name ]
         );
+        const token = jwt.sign({ email: email }, JWT_SECRET, { expiresIn: '1h' });
+        // console.log(token);
         const createdNote = result.rows[0];
         res.status(201).json({
-        message: 'Note created successfully',
-        note: createdNote,
+        message: 'Note created successfully', 
+        note: createdNote, token
         });
     } catch (err) {
         console.log(err);
@@ -42,9 +48,10 @@ export const login = async (req, res) => {
         if (!passwordMatch) {
             return res.status(200).json({ message: 'Invalid credentials' });
         }
-
-        res.status(200).json({ message: 'Login successful', user });
-    } catch (err) {
+        const token = jwt.sign({ email: user.user_email }, JWT_SECRET, { expiresIn: '1h' });
+        // console.log(token);
+        res.status(200).json({ message: 'Login successful', token, user });
+    } catch (err) { 
         console.log(err);
         res.status(500).json({ message: 'Internal Server Error' });
     }

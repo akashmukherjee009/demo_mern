@@ -11,15 +11,25 @@ import {
 } from "react-router-dom";
 import Login from './components/Login'
 
+import PrivateRoute from './components/PrivateRoute'
+import Home from './components/Home'
+
+
+
+
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <Router>
+        <Router>
               <div className="App">
                   <ul className="App-header">
-                     
+                       <li>
+                          <Link to="/Home">
+                              Home
+                          </Link>
+                      </li>
                       <li>
                           <Link to="/register">
                               Register
@@ -32,11 +42,7 @@ function App() {
                       </li>
                   </ul>
                   <Routes>
-                      {/* <Route
-                          
-                          path="/"
-                          element={<Home />}
-                      ></Route> */}
+                  <Route path="/home" element={<PrivateRoute element={<Home />} />} />
                       <Route
                           
                           path="/register"
@@ -49,7 +55,7 @@ function App() {
                       ></Route>
                   </Routes>
               </div>
-          </Router>
+        </Router>
 
 
     </>

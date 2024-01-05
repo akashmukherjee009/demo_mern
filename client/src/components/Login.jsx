@@ -25,6 +25,8 @@ const Login = () => {
             console.log('Response:', values);
             setMessage(response.data.message);
             resetForm();
+            const receivedToken = response.data.token;
+            localStorage.setItem('authToken', receivedToken);
         } catch (error) {
             console.error('Error:', error);
         }
