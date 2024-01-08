@@ -2,10 +2,26 @@ import pool from '../db.js';
 import bcrypt from 'bcrypt';
 import jwt  from 'jsonwebtoken';
 import { JWT_SECRET } from '../index.js';
-
-
-
 import { validationResult, check } from 'express-validator';
+
+//image upload
+import multer from 'multer';
+import path from 'path';
+
+
+// Set up multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads'); // Specify the folder where you want to save uploaded files
+    },
+    filename: (req, file, cb) => {
+      const fileName = `${Date.now()}-${file.originalname}`;
+      cb(null, fileName);
+    },
+  });
+
+
+
 
 export const createNote = async (req, res) => {
     try {

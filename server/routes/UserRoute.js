@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNote, login } from '../controller/NoteController.js';
+import { createNote, login } from '../controller/UserController.js';
 import { verifyToken } from '../middleware/VarifyToken.js';
 import { body, validationResult } from 'express-validator'
 import { registrationValidationRules } from '../validators/UserValidator.js';
