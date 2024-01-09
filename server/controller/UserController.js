@@ -27,7 +27,8 @@ export const createNote = async (req, res) => {
     try {
         // Validation using express-validator
         const errors = validationResult(req);
-        console.log(errors);
+        console.log(req.body);
+        console.log(req.files);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }

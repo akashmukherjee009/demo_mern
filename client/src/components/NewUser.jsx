@@ -11,6 +11,7 @@ const NewNote = () => {
         name: Yup.string().required('Name is required'),
         email: Yup.string().email('Invalid email address').required('Email is required'),
         password: Yup.string().min(4, 'Password must be at least 8 characters').required('Password is required'),
+        image: Yup.mixed().required('Image is required'),
     });
 
     const formik = useFormik({
@@ -18,18 +19,45 @@ const NewNote = () => {
         name: '',
         email: '',
         password: '',
+        image: null,
         },
         validationSchema,
-        onSubmit: async (values , { resetForm, setStatus }) => {
-        try {
-            const response = await axios.post('http://localhost:5000/notes', values);
-            console.log('Response:', values);
-            setMessage(response.data.message);
-            resetForm();
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        onSubmit: async (values, { resetForm, setStatus }) => {
+            try {
+                const reader = new FileReader();
+        
+                reader.onloadend = async () => {
+                    const base64data = reader.result.split(',')[1];
+        
+                    const requestData = {
+                        name: values.name,
+                        email: values.email,
+                        password: values.password,
+                        image: values.image,
+                    };
+                    console.log(requestData);
+                    try {
+                        const response = await axios.post('http://localhost:5000/notes', requestData,
+                        {headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }});
+                        console.log('Response:', response.data);
+                        setMessage(response.data.message);
+                        resetForm();
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                };
+        
+                // Read the file as a data URL
+                if (values.image) {
+                    reader.readAsDataURL(values.image);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
         },
+        
     });
 
     return (
@@ -74,6 +102,16 @@ const NewNote = () => {
                 {formik.touched.password && formik.errors.password && (
                 <p className="error">{formik.errors.password}</p>
                 )}
+            </div>
+            <div className="new_subscription_control">
+                <label htmlFor="">Image</label>
+                <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    onChange={(event) => formik.setFieldValue('image', event.currentTarget.files[0])}
+                />
+                {formik.touched.image && formik.errors.image && <p className="error">{formik.errors.image}</p>}
             </div>
             </div>
             <div className="new_subscription_actions">
